@@ -5,7 +5,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc",
+    "debug": "ts-node-script -r dotenv/config src/index.ts dotenv_config_path=.env"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
@@ -14,6 +15,7 @@
     "twitter": "^1.7.1"
   },
   "devDependencies": {
+    "ts-node": "^9.1.1",
     "@types/spotify-web-api-node": "^5.0.0",
     "@types/twitter": "^1.7.0",
     "typescript": "^4.1.3"
