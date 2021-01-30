@@ -9,7 +9,9 @@
     "debug": "ts-node-script -r dotenv/config src/index.ts dotenv_config_path=.env"
   },
   "dependencies": {
+    "@types/lowdb": "^1.0.9",
     "dotenv": "^8.2.0",
+    "lowdb": "^1.0.0",
     "minimist": "^1.2.5",
     "spotify-web-api-node": "^5.0.2",
     "twitter": "^1.7.1"

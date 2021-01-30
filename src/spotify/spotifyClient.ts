@@ -1,4 +1,5 @@
 import SpotifyWebApi from 'spotify-web-api-node';
+import { Songs } from './songs';
 
 export class SpotifyClient {
   private client: SpotifyWebApi;
@@ -12,14 +13,25 @@ export class SpotifyClient {
     });
   }
 
-  getPlaylist = async () => {
-    await this.client
+  getPlaylist = async (): Promise<Songs[]> => {
+    return await this.client
       .getPlaylist('2T9OrTaA9xpHVzstmjozBP')
       .then((res) => {
-        console.log(res.body.tracks.items);
+        console.log(res)
+        return res.body.tracks.items.map((obj) => {
+          return {
+            name: obj.track.name,
+            url: obj.track.external_urls.spotify,
+            id: obj.track.id,
+          };
+        });
       })
-      .catch((err) => this.handleError(err.body));
-  }
+      .catch((err) => {
+        this.handleError(err.body);
+
+        return [];
+      });
+  };
 
   refreshToken = async () => {
     await this.client
@@ -32,7 +44,7 @@ export class SpotifyClient {
       .catch((err) => {
         console.log('Could not refresh access token', err);
       });
-  }
+  };
 
   private async handleError(body) {
     if (body.error.message.includes('token expired')) this.refreshToken();

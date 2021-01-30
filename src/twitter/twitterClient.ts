@@ -15,7 +15,7 @@ export class TwitterClient {
   postTwet = async (status: string) => {
     this.client.post('statuses/update', { status }, (err, tweet, response) => {
       if (err) console.log(err);
-      console.log(tweet);
+      console.log({ id: tweet.id, created_at: tweet.created_at, text: tweet.text });
     });
   };
 }
