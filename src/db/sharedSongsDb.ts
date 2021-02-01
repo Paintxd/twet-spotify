@@ -1,9 +1,9 @@
-import Lowdb, { LowdbSync } from 'lowdb';
+import Lowdb, { LowdbAsync, LowdbSync } from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import { Songs } from 'src/spotify/songs';
 
 export class SharedSongsDb {
-  private db: LowdbSync<Songs[]>;
+  private db;
 
   constructor() {
     const adapter = new FileSync('shared-songs.json');
@@ -13,5 +13,13 @@ export class SharedSongsDb {
 
   private setDefault = () => {
     this.db.defaults({ songs: [] }).write();
+  };
+
+  insertSharedSong = (songId: string) => {
+    this.db.get('songs').push(songId).write();
+  };
+
+  getSharedSongs = () => {
+    return this.db.get('songs').__wrapped__.songs;
   };
 }

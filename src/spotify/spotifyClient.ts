@@ -13,12 +13,11 @@ export class SpotifyClient {
     });
   }
 
-  getPlaylist = async (): Promise<Songs[]> => {
+  getPlaylistTracks = async (offset: number): Promise<Songs[]> => {
     return await this.client
-      .getPlaylist('2T9OrTaA9xpHVzstmjozBP')
+      .getPlaylistTracks('2T9OrTaA9xpHVzstmjozBP', { offset, limit: 50 })
       .then((res) => {
-        console.log(res)
-        return res.body.tracks.items.map((obj) => {
+        return res.body.items.map((obj) => {
           return {
             name: obj.track.name,
             url: obj.track.external_urls.spotify,
@@ -30,6 +29,17 @@ export class SpotifyClient {
         this.handleError(err.body);
 
         return [];
+      });
+  };
+
+  getPlaylist = async () => {
+    return await this.client
+      .getPlaylist('2T9OrTaA9xpHVzstmjozBP')
+      .then((res) => {
+        return res.body.tracks.total;
+      })
+      .catch((err) => {
+        this.handleError(err.body);
       });
   };
 
