@@ -1,26 +1,17 @@
-import { SharedSongsDb } from './db/sharedSongsDb';
-import { SpotifyClient } from './spotify/spotifyClient';
-import { TwitterClient } from './twitter/twitterClient';
-import { RandomGenerator } from './utils/randonsGenerator';
-import { SongShare } from './utils/songShare';
+import fs from 'fs';
+import path from 'path';
+import { CronJob } from 'cron';
+import { share } from './songSharing/shareSong';
 
-const run = async () => {
-  const twitterClient = new TwitterClient();
-  const spotifyClient = new SpotifyClient();
-  const sharedSongsDb = new SharedSongsDb();
-  await spotifyClient.refreshToken();
+const shareJob = new CronJob('0 19 * * *', 
+  () => share(), null, true, 'America/Sao_Paulo'
+);
 
-  const playlistSize = await spotifyClient.getPlaylist();
-  const offset = RandomGenerator.offsetRandom(playlistSize);
+const clearDbJob = new CronJob('0 20 * * 0',
+  () => fs.unlinkSync(path.join(__dirname, '../shared-songs.json')),
+  null, true, 'America/Sao_Paulo'
+);
 
-  const songs = await spotifyClient.getPlaylistTracks(offset);
-  const sharedSongs: string[] = sharedSongsDb.getSharedSongs();
-  const recentListenings = await spotifyClient.getRecentListenings();
-
-  const sharedSong = SongShare.shareSong(songs, recentListenings, sharedSongs);
-  sharedSongsDb.insertSharedSong(sharedSong.id);
-  console.log(`Shared song - ${JSON.stringify(sharedSong)}\n`);
-
-  // twitterClient.postTwet(sharedSong.url);
-};
-run();
+console.log('- Starting jobs');
+shareJob.start();
+clearDbJob.start();
