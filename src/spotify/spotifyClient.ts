@@ -1,5 +1,5 @@
 import SpotifyWebApi from 'spotify-web-api-node';
-import { Songs } from './songs';
+import { Song } from './song';
 
 export class SpotifyClient {
   private client: SpotifyWebApi;
@@ -13,9 +13,28 @@ export class SpotifyClient {
     });
   }
 
-  getPlaylistTracks = async (offset: number): Promise<Songs[]> => {
+  getRecentListenings = async (): Promise<Song[]> => {
     return await this.client
-      .getPlaylistTracks('2T9OrTaA9xpHVzstmjozBP', { offset, limit: 50 })
+      .getMyRecentlyPlayedTracks()
+      .then((res) => {
+        return res.body.items.map((obj) => {
+          return {
+            name: obj.track.name,
+            url: obj.track.external_urls.spotify,
+            id: obj.track.id,
+          };
+        });
+      })
+      .catch((err) => {
+        this.handleError(err.body);
+
+        return [];
+      });
+  };
+
+  getPlaylistTracks = async (offset: number): Promise<Song[]> => {
+    return await this.client
+      .getPlaylistTracks('2T9OrTaA9xpHVzstmjozBP', { offset })
       .then((res) => {
         return res.body.items.map((obj) => {
           return {

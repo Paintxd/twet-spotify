@@ -1,6 +1,6 @@
 export class RandomGenerator {
   static offsetRandom(playlistSize) {
-    const offsetMax = Number(playlistSize) - 50;
+    const offsetMax = Number(playlistSize) - 100;
     return Math.floor(Math.random() * Math.floor(offsetMax));
   }
 

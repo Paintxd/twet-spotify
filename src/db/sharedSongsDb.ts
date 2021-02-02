@@ -1,6 +1,5 @@
-import Lowdb, { LowdbAsync, LowdbSync } from 'lowdb';
+import Lowdb from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
-import { Songs } from 'src/spotify/songs';
 
 export class SharedSongsDb {
   private db;

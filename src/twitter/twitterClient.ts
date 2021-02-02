@@ -15,7 +15,13 @@ export class TwitterClient {
   postTwet = async (status: string) => {
     this.client.post('statuses/update', { status }, (err, tweet, response) => {
       if (err) console.log(err);
-      console.log({ id: tweet.id, created_at: tweet.created_at, text: tweet.text });
+      console.log(
+        `Posted tweet - ${JSON.stringify({
+          id: tweet.id,
+          created_at: tweet.created_at,
+          text: tweet.text,
+        })}`,
+      );
     });
   };
 }

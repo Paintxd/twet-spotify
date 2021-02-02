@@ -2,10 +2,7 @@ import { SharedSongsDb } from './db/sharedSongsDb';
 import { SpotifyClient } from './spotify/spotifyClient';
 import { TwitterClient } from './twitter/twitterClient';
 import { RandomGenerator } from './utils/randonsGenerator';
-
-require('dotenv').config();
-
-const argv = require('minimist')(process.argv.slice(2));
+import { SongShare } from './utils/songShare';
 
 const run = async () => {
   const twitterClient = new TwitterClient();
@@ -14,18 +11,16 @@ const run = async () => {
   await spotifyClient.refreshToken();
 
   const playlistSize = await spotifyClient.getPlaylist();
-
   const offset = RandomGenerator.offsetRandom(playlistSize);
+
   const songs = await spotifyClient.getPlaylistTracks(offset);
   const sharedSongs: string[] = sharedSongsDb.getSharedSongs();
+  const recentListenings = await spotifyClient.getRecentListenings();
 
-  const filteredSongs = songs.filter(song => sharedSongs.indexOf(song.id) < 0);
-
-  const randomSongPosition = RandomGenerator.positionShare(filteredSongs.length);
-  const sharedSong = filteredSongs[randomSongPosition];
+  const sharedSong = SongShare.shareSong(songs, recentListenings, sharedSongs);
   sharedSongsDb.insertSharedSong(sharedSong.id);
-  console.log(sharedSong);
+  console.log(`Shared song - ${JSON.stringify(sharedSong)}\n`);
 
-  // twitterClient.postTwet(sharedSong.url)
+  // twitterClient.postTwet(sharedSong.url);
 };
 run();
