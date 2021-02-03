@@ -1,10 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { CronJob } from 'cron';
-import { share } from './songSharing/shareSong';
+import songShare from './songSharing/songShare';
 
 const shareJob = new CronJob('0 19 * * *', 
-  () => share(), null, true, 'America/Sao_Paulo'
+  () => songShare.share(), 
+  null, true, 'America/Sao_Paulo'
 );
 
 const clearDbJob = new CronJob('0 20 * * 0',
