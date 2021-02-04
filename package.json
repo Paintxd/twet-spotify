@@ -9,14 +9,19 @@
     "debug": "ts-node-script -r dotenv/config src/index.ts dotenv_config_path=.env"
   },
   "dependencies": {
+    "clear": "^0.1.0",
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
+    "figlet": "^1.5.0",
+    "inquirer": "^7.3.3",
     "lowdb": "^1.0.0",
     "spotify-web-api-node": "^5.0.2",
     "twitter": "^1.7.1"
   },
   "devDependencies": {
     "@types/cron": "^1.7.2",
+    "@types/figlet": "^1.2.1",
+    "@types/inquirer": "^7.3.1",
     "@types/lowdb": "^1.0.9",
     "@types/spotify-web-api-node": "^5.0.0",
     "@types/twitter": "^1.7.0",

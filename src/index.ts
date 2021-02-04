@@ -1,18 +1,46 @@
-import fs from 'fs';
-import path from 'path';
-import { CronJob } from 'cron';
-import songShare from './songSharing/songShare';
+import figlet from 'figlet';
+import inquirer from 'inquirer';
 
-const shareJob = new CronJob('0 19 * * *', 
-  () => songShare.share(), 
-  null, true, 'America/Sao_Paulo'
-);
+require('clear')();
 
-const clearDbJob = new CronJob('0 20 * * 0',
-  () => fs.unlinkSync(path.join(__dirname, '../shared-songs.json')),
-  null, true, 'America/Sao_Paulo'
-);
+export const setupApp = (spotifySetup: boolean, twitterSetup: boolean) => {
+  console.log(
+    figlet.textSync('Tweet Songs', {
+      font: 'Electronic',
+    }),
+  );
 
-console.log('- Starting jobs');
-shareJob.start();
-clearDbJob.start();
+  let choices;
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'start_option',
+        message: 'Como deseja iniciar a aplicacao',
+        choices: ['Setup twitter', 'Setup spotify', 'Start crons', 'teste'],
+        filter: (val: string) => {
+          return val.toLowerCase().replace(' ', '_');
+        },
+      },
+    ])
+    .then((res) => {
+      switch (res.start_option) {
+        case 'teste':
+          require('./teste');
+          break;
+        case 'setup_spotify':
+          require('./credentials/setSpotifyCredentials');
+          break;
+        case 'setup_twitter':
+          require('./credentials/setTwitterCredentials');
+          break;
+        case 'start_crons':
+          require('./cron/startCron');
+          break;
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
+};
+setupApp(false, false);
