@@ -1,23 +1,22 @@
-import figlet from 'figlet';
 import inquirer from 'inquirer';
+import TerminalSetup from './utils/terminal';
+import { spotifyCredentialsStep } from './credentials/setSpotifyCredentials';
+import { startCrons } from './cron/startCron';
+import { twitterCredentialsStep } from './credentials/setTwitterCredentials';
 
-require('clear')();
+let choices = ['Start crons', 'Setup twitter', 'Setup spotify'];
 
-export const setupApp = (spotifySetup: boolean, twitterSetup: boolean) => {
-  console.log(
-    figlet.textSync('Tweet Songs', {
-      font: 'Electronic',
-    }),
-  );
+export const setupApp = (step: string) => {
+  TerminalSetup.clearAndPrint();
 
-  let choices;
+  choices = choices.filter((option) => option !== step);
   inquirer
     .prompt([
       {
         type: 'list',
         name: 'start_option',
-        message: 'Como deseja iniciar a aplicacao',
-        choices: ['Setup twitter', 'Setup spotify', 'Start crons', 'teste'],
+        message: 'Select your startup',
+        choices,
         filter: (val: string) => {
           return val.toLowerCase().replace(' ', '_');
         },
@@ -25,17 +24,14 @@ export const setupApp = (spotifySetup: boolean, twitterSetup: boolean) => {
     ])
     .then((res) => {
       switch (res.start_option) {
-        case 'teste':
-          require('./teste');
-          break;
         case 'setup_spotify':
-          require('./credentials/setSpotifyCredentials');
+          spotifyCredentialsStep();
           break;
         case 'setup_twitter':
-          require('./credentials/setTwitterCredentials');
+          twitterCredentialsStep();
           break;
         case 'start_crons':
-          require('./cron/startCron');
+          startCrons();
           break;
       }
     })
@@ -43,4 +39,4 @@ export const setupApp = (spotifySetup: boolean, twitterSetup: boolean) => {
       throw err;
     });
 };
-setupApp(false, false);
+setupApp('');

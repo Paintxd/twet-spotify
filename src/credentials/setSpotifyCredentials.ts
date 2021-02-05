@@ -1,16 +1,17 @@
-import fs from 'fs';
-import path from 'path';
+import { setupApp } from '../index';
+import TerminalSetup from '../utils/terminal';
 
-const envValues = `
-TWITTER_CONSUMER_KEY=
-TWITTER_CONSUMER_SECRET=
-TWITTER_ACCESS_TOKEN_KEY=
-TWITTER_ACCESS_TOKEN_SECRET=
+export const spotifyCredentialsStep = () => {
+  TerminalSetup.clearAndPrint();
 
-SPOTIFY_CLIENT_ID=
-SPOTIFY_CLIENT_SECRET=
-SPOTIFY_REFRESH_TOKEN=
-SPOTIFY_AUTHORIZATION_CODE=
-`;
 
-fs.writeFileSync(path.join(__dirname, '../.env.dev'), envValues);
+
+  // const envValues = `
+  // SPOTIFY_CLIENT_ID=
+  // SPOTIFY_CLIENT_SECRET=
+  // SPOTIFY_REFRESH_TOKEN=
+  // SPOTIFY_AUTHORIZATION_CODE=
+  // `;
+
+  setupApp('Setup spotify');
+};
