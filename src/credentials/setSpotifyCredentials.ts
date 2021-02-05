@@ -1,17 +1,15 @@
+import { authorizeStep } from './spotifySteps/authorizeStep';
+import { authorizationCodeStep } from './spotifySteps/authorizationCodeStep';
+import { refreshTokenStep } from './spotifySteps/refreshTokenStep';
 import { setupApp } from '../index';
 import TerminalSetup from '../utils/terminal';
 
-export const spotifyCredentialsStep = () => {
-  TerminalSetup.clearAndPrint();
+export const spotifyCredentialsStep = async () => {
+  await authorizeStep();
 
+  await authorizationCodeStep();
 
-
-  // const envValues = `
-  // SPOTIFY_CLIENT_ID=
-  // SPOTIFY_CLIENT_SECRET=
-  // SPOTIFY_REFRESH_TOKEN=
-  // SPOTIFY_AUTHORIZATION_CODE=
-  // `;
+  await refreshTokenStep();
 
   setupApp('Setup spotify');
 };

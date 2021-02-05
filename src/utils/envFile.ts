@@ -5,7 +5,8 @@ export default class EnvFile {
   static writeFile(envVars: string) {
     const filePath = path.join(__dirname, '../../.env.dev');
     const file = fs.readFileSync(filePath);
-    const envValue = `${file}\n$${envVars}`
+
+    const envValue = `${file}\n${envVars}`
 
     fs.writeFileSync(filePath, envValue);
   }
