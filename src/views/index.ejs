@@ -1,6 +1,13 @@
-<strong>
-    <%= code %>
-</strong>
+<input type="text" value="<%= code %>" id="inputCp">
+
+<button onclick="cpClip()">Copy Code</button>
 <script>
   window.history.replaceState({}, document.title, '/');
+
+  const cpClip = () => {
+    const cpText = document.getElementById('inputCp');
+
+    cpText.select();
+    document.execCommand('copy');
+  };
 </script>

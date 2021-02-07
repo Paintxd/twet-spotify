@@ -1,10 +1,11 @@
 import inquirer from 'inquirer';
+import kleur from 'kleur';
 import EnvFile from '../../utils/envFile';
 import TerminalSetup from '../../utils/terminal';
 
 export const authorizationCodeStep = async (authorizationUrl: string) => {
   TerminalSetup.clearAndPrint();
-  console.log(authorizationUrl);
+  console.log(kleur.bgRed().bold().white(authorizationUrl));
 
   await inquirer
     .prompt([

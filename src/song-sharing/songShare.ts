@@ -1,3 +1,4 @@
+import kleur from 'kleur';
 import { RandomGenerator } from './utils/randonsGenerator';
 import { SharedSongsDb } from '../db/sharedSongsDb';
 import { Song } from './spotify/song';
@@ -34,10 +35,10 @@ class SongShare {
   };
 
   private postAndInsert = (song: Song, type: string) => {
-    console.log(`shared ${type} - ${song}`);
+    console.log(kleur.bold().white(`shared ${type} - ${song}`));
 
     this.sharedSongsDb.insertSharedSong(song.id);
-    // twitterClient.postTwet(song.url);
+    this.twitterClient.postTwet(song.url);
   };
 
   private getSong = (songs: Song[], sharedSongs: string[]): Song => {

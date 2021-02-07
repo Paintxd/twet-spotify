@@ -1,11 +1,12 @@
 import fs from 'fs';
+import kleur from 'kleur';
 import path from 'path';
 import { CronJob } from 'cron';
 import songShare from '../song-sharing/songShare';
 
 export const startCrons = () => {
-  const shareJob = new CronJob('0 19 * * *', 
-    () => songShare.share(), 
+  const shareJob = new CronJob('0 19 * * *',
+    () => songShare.share(),
     null, true, 'America/Sao_Paulo'
   );
 
@@ -14,7 +15,7 @@ export const startCrons = () => {
     null, true, 'America/Sao_Paulo'
   );
 
-  console.log('- Starting jobs');
+  console.log(kleur.bold().white('- Starting jobs'));
   shareJob.start();
   clearDbJob.start();
 }

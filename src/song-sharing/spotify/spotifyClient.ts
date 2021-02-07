@@ -1,3 +1,4 @@
+import kleur from 'kleur';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { Song } from './song';
 
@@ -66,18 +67,18 @@ export class SpotifyClient {
     await this.client
       .refreshAccessToken()
       .then((res) => {
-        console.log('The access token has been refreshed!');
+        console.log(kleur.bold().white('The access token has been refreshed!'));
 
         this.client.setAccessToken(res.body['access_token']);
       })
       .catch((err) => {
-        console.log('Could not refresh access token', err);
+        console.log(kleur.bgRed().bold().white(`Could not refresh access token ${err}`));
       });
   };
 
   private async handleError(body) {
     if (body.error.message.includes('token expired')) this.refreshToken();
 
-    console.log('Request error', body);
+    console.log(kleur.bgRed().bold().white(`Request error${body}`));
   }
 }
