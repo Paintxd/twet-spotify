@@ -5,10 +5,9 @@ import TerminalSetup from '../../utils/terminal';
 
 export const authorizeStep = async () => {
   TerminalSetup.clearAndPrint();
-  const scopes = ['user-read-recently-played', 'user-read-currently-playing'];
-  const redirectUri = 'localhost:8081';
+  const scopes = ['user-read-recently-played', 'user-read-currently-playing', 'user-read-private', 'user-read-email'];
 
-  await inquirer
+  return await inquirer
     .prompt([
       {
         type: 'input',
@@ -20,17 +19,22 @@ export const authorizeStep = async () => {
         name: 'client_secret',
         message: 'Insert your client secret',
       },
+      {
+        type: 'input',
+        name: 'redirect_uri',
+        message: 'Insert your redirect uri'
+      }
     ])
     .then((res) => {
-      const envValues = `SPOTIFY_CLIENT_ID=${res.client_id}\nSPOTIFY_CLIENT_SECRET=${res.client_secret}`;
+      const envValues = `SPOTIFY_CLIENT_ID=${res.client_id}\nSPOTIFY_CLIENT_SECRET=${res.client_secret}\nSPOTIFY_REDIRECT_URI=${res.redirect_uri}`;
       EnvFile.writeFile(envValues);
 
       const spotifyClient = new SpotifyWebApi({
-        redirectUri,
+        redirectUri: res.redirect_uri,
         clientId: res.client_id,
       });
 
       const authorizationUrl = spotifyClient.createAuthorizeURL(scopes, 'authorization');
-      console.log(`Acess this link and get your authorization code \n - ${authorizationUrl}`);
+      return `Acess this link and get your authorization code \n - ${authorizationUrl}`;
     });
 };

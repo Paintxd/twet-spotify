@@ -33,6 +33,6 @@ export const twitterCredentialsStep = () => {
       const envValues = `TWITTER_CONSUMER_KEY=${res.consumer_key}\nTWITTER_CONSUMER_SECRET=${res.consumer_secret}\nTWITTER_ACCESS_TOKEN_KEY=${res.acess_token_key}\nTWITTER_ACCESS_TOKEN_SECRET=${res.acess_token_secret}\n`;
       EnvFile.writeFile(envValues);
 
-      setupApp('Setup twitter');
+      setupApp();
     });
 };

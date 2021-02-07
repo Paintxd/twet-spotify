@@ -1,15 +1,30 @@
+import express from 'express';
 import { authorizeStep } from './spotifySteps/authorizeStep';
 import { authorizationCodeStep } from './spotifySteps/authorizationCodeStep';
 import { refreshTokenStep } from './spotifySteps/refreshTokenStep';
 import { setupApp } from '../index';
-import TerminalSetup from '../utils/terminal';
 
 export const spotifyCredentialsStep = async () => {
-  await authorizeStep();
+  setupExpress();
 
-  await authorizationCodeStep();
+  const authorizationUrl = await authorizeStep();
+
+  await authorizationCodeStep(authorizationUrl);
 
   await refreshTokenStep();
 
-  setupApp('Setup spotify');
+  setupApp();
+};
+
+const setupExpress = () => {
+  const app = express();
+  app.set('views', 'src/views');
+  app.set('view engine', 'ejs');
+  const server = app.listen(8081, () => {});
+
+  app.get('', (req, res) => {
+    if (req.query && req.query.code)
+      res.render('index', { code: req.query.code });
+    server.close();
+  });
 };

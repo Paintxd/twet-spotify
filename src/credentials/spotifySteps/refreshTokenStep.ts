@@ -1,29 +1,15 @@
+import SpotifyWebApi from 'spotify-web-api-node';
+import EnvFile from '../../utils/envFile';
 
-export const refreshTokenStep = () => {
-  // var credentials = {
-  //   clientId: 'someClientId',
-  //   clientSecret: 'someClientSecret',
-  //   redirectUri: 'http://www.michaelthelin.se/test-callback'
-  // };
+export const refreshTokenStep = async () => {
+  const spotifyClient = new SpotifyWebApi({
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+  });
 
-  // var spotifyApi = new SpotifyWebApi(credentials);
-
-  // // The code that's returned as a query parameter to the redirect URI
-  // var code = 'MQCbtKe23z7YzzS44KzZzZgjQa621hgSzHN';
-
-  // // Retrieve an access token and a refresh token
-  // spotifyApi.authorizationCodeGrant(code).then(
-  //   function(data) {
-  //     console.log('The token expires in ' + data.body['expires_in']);
-  //     console.log('The access token is ' + data.body['access_token']);
-  //     console.log('The refresh token is ' + data.body['refresh_token']);
-
-  //     // Set the access token on the API object to use it in later calls
-  //     spotifyApi.setAccessToken(data.body['access_token']);
-  //     spotifyApi.setRefreshToken(data.body['refresh_token']);
-  //   },
-  //   function(err) {
-  //     console.log('Something went wrong!', err);
-  //   }
-  // );
+  spotifyClient.authorizationCodeGrant(process.env.SPOTIFY_AUTHORIZATION_CODE)
+    .then((res) => {
+      EnvFile.writeFile(`SPOTIFY_REFRESH_TOKEN=${res.body.refresh_token}`);
+    });
 };

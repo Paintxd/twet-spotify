@@ -4,12 +4,15 @@ import { spotifyCredentialsStep } from './credentials/setSpotifyCredentials';
 import { startCrons } from './cron/startCron';
 import { twitterCredentialsStep } from './credentials/setTwitterCredentials';
 
-let choices = ['Start crons', 'Setup twitter', 'Setup spotify'];
-
-export const setupApp = (step: string) => {
+export const setupApp = () => {
   TerminalSetup.clearAndPrint();
 
-  choices = choices.filter((option) => option !== step);
+  const choices = ['Start crons'];
+  if(!process.env.TWITTER_ACCESS_TOKEN_SECRET)
+    choices.push('Setup twitter');
+  if(!process.env.SPOTIFY_REFRESH_TOKEN)
+    choices.push('Setup spotify');
+
   inquirer
     .prompt([
       {
@@ -39,4 +42,4 @@ export const setupApp = (step: string) => {
       throw err;
     });
 };
-setupApp('');
+setupApp();

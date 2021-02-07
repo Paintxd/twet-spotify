@@ -1,4 +1,20 @@
+import inquirer from 'inquirer';
+import EnvFile from '../../utils/envFile';
+import TerminalSetup from '../../utils/terminal';
 
-export const authorizationCodeStep = async () => {
-  // fazer logica para pegar authorization code e jogar no .env
+export const authorizationCodeStep = async (authorizationUrl: string) => {
+  TerminalSetup.clearAndPrint();
+  console.log(authorizationUrl);
+
+  await inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'authorization_code',
+        message: 'Insert your authorization code',
+      },
+    ])
+    .then((res) => {
+      EnvFile.writeFile(`SPOTIFY_AUTHORIZATION_CODE=${res.authorization_code}`);
+    });
 };
